@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Data Science</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#7C3AED', // violet-600
+            secondary: '#8B5CF6', // violet-500
+            light: '#F3F4F6', // gray-100
+            dark: '#1F2937', // gray-800
+            // HTP colors
+            htpBordeaux: '#E30B5D', // Couleur fuchsia de la fleur d'orchidée
+            htpWhite: '#ffffff',
+            // ColocMatch colors
+            colocPink: '#DF4D74', // Nouvelle couleur rose pour ColocMatch
+            colocWhite: '#ffffff',
+            // Carrefour colors
+            carrefourBlue: '#004E9E', // Bleu Carrefour officiel
+            carrefourRed: '#E30613', // Rouge Carrefour officiel
+            carrefourWhite: '#FFFFFF', // Blanc Carrefour
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+    .snap-container {
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .snap-slide {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      overflow-y: auto;
+      max-height: 100vh;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #7C3AED 0%, #C4B5FD 100%);
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #7C3AED 0%, #C4B5FD 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-indicator {
+      transition: all 0.3s ease;
+    }
+    .nav-indicator.active {
+      background-color: #7C3AED;
+      width: 2rem;
+    }
+    .scroll-arrow {
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+    /* Animation pour la fleur d'orchidée */
+    .orchid-logo {
+      filter: drop-shadow(0 0 8px rgba(227, 11, 93, 0.5));
+      transition: all 0.5s ease;
+    }
+    .orchid-logo:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 15px rgba(227, 11, 93, 0.8));
+    }
+    .logo-container {
+      position: relative;
+      padding: 1rem;
+      background: radial-gradient(circle at center, rgba(227, 11, 93, 0.2) 0%, transparent 70%);
+    }
+    .logo-container:before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      border-radius: 50%;
+      border: 2px solid rgba(227, 11, 93, 0.3);
+      animation: pulse 3s infinite;
+    }
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.7;
+      }
+      50% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(0.95);
+        opacity: 0.7;
+      }
+    }
+    
+    /* Styles pour ColocMatch */
+    .key-logo {
+      transition: all 0.3s ease;
+    }
+    .key-logo:hover {
+      transform: rotate(15deg);
+    }
+    .coloc-card {
+      transition: all 0.3s ease;
+    }
+    .coloc-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(223, 77, 116, 0.2);
+    }
+    .coloc-badge {
+      position: relative;
+      overflow: hidden;
+    }
+    .coloc-badge::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.2) 50%, transparent 52%);
+      background-size: 200% 200%;
+      animation: shine 3s linear infinite;
+    }
+    @keyframes shine {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    /* Styles pour Carrefour */
+    .carrefour-logo {
+      overflow: hidden;
+      position: relative;
+    }
+    .carrefour-logo::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0.2), rgba(255,255,255,0));
+      transform: rotate(30deg);
+      animation: carrefourShine 6s linear infinite;
+    }
+    @keyframes carrefourShine {
+      0% { transform: translateX(-100%) rotate(30deg); }
+      100% { transform: translateX(100%) rotate(30deg); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  
+  <!-- Navigation latérale fixe -->
+  <div class="fixed top-1/2 right-8 transform -translate-y-1/2 z-50 flex flex-col gap-3 items-center">
+    <button class="nav-indicator active h-2 w-8 bg-gray-300 rounded-full" onclick="document.getElementById('slide-1').scrollIntoView({behavior: 'smooth'})"></button>
+    <button class="nav-indicator h-2 w-2 bg-gray-300 rounded-full" onclick="document.getElementById('slide-2').scrollIntoView({behavior: 'smooth'})"></button>
+    <button class="nav-indicator h-2 w-2 bg-gray-300 rounded-full" onclick="document.getElementById('slide-3').scrollIntoView({behavior: 'smooth'})"></button>
+    <button class="nav-indicator h-2 w-2 bg-gray-300 rounded-full" onclick="document.getElementById('slide-4').scrollIntoView({behavior: 'smooth'})"></button>
+    <button class="nav-indicator h-2 w-2 bg-gray-300 rounded-full" onclick="document.getElementById('slide-5').scrollIntoView({behavior: 'smooth'})"></button>
+  </div>
+
+  <!-- Container principal avec défilement horizontal -->
+  <div class="snap-container flex w-full h-screen overflow-x-scroll overflow-y-hidden">
+    
+    <!-- Slide 1: Introduction -->
+    <div id="slide-1" class="snap-slide flex flex-col justify-center items-center w-screen h-screen flex-shrink-0 px-8 md:px-16">
+      <div class="max-w-5xl mx-auto text-center">
+        <h1 class="text-4xl md:text-7xl font-bold mb-6">
+          <span class="text-gradient">Transformer les données</span> en 
+          <br>solutions impactantes
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto">
+          Étudiante en Data Science passionnée par la création de projets novateurs 
+          qui résolvent des problèmes concrets avec des données.
+        </p>
+        <div class="flex justify-center gap-6">
+          <div class="relative inline-block">
+            <button id="projects-button" class="px-8 py-3 bg-primary text-white rounded-full font-medium hover:bg-opacity-90 transition duration-300 shadow-lg">
+              Voir mes projets
+            </button>
+            <div id="projects-menu" class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 hidden z-50">
+              <div class="p-2">
+                <button onclick="document.getElementById('slide-2').scrollIntoView({behavior: 'smooth'})" class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition flex items-center">
+                  <span class="w-4 h-4 rounded-full bg-htpBordeaux mr-3"></span>
+                  <span>HTP — Her Third Place</span>
+                </button>
+                <button onclick="document.getElementById('slide-3').scrollIntoView({behavior: 'smooth'})" class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition flex items-center">
+                  <span class="w-4 h-4 rounded-full bg-colocPink mr-3"></span>
+                  <span>ColocMatch — App de Matching</span>
+                </button>
+                <button onclick="document.getElementById('slide-4').scrollIntoView({behavior: 'smooth'})" class="w-full text-left p-3 rounded-lg hover:bg-gray-100 transition flex items-center">
+                  <span class="w-4 h-4 rounded-full bg-carrefourBlue mr-3"></span>
+                  <span>Carrefour — Base de Données</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button onclick="document.getElementById('slide-5').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 border-2 border-primary text-primary rounded-full font-medium hover:bg-primary hover:text-white transition duration-300">
+            Me contacter
+          </button>
+        </div>
+      </div>
+      <div class="absolute bottom-10 right-1/2 transform translate-x-1/2 scroll-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" transform="rotate(270)">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+      
+      <!-- Indicateur de défilement vertical -->
+      <div class="absolute bottom-10 right-8 text-primary flex flex-col items-center">
+        <span class="text-sm mb-1">Défiler</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Slide 2: Projet HTP -->
+    <div id="slide-2" class="snap-slide flex w-screen h-screen flex-shrink-0 bg-gradient-to-br from-htpBordeaux to-black">
+      <div class="flex flex-col lg:flex-row w-full">
+        <div class="w-full lg:w-1/2 p-8 md:p-16 flex flex-col justify-center">
+          <span class="text-htpWhite font-semibold text-lg mb-2">PROJET 01</span>
+          <h2 class="text-3xl md:text-5xl font-bold mb-6 text-htpWhite">HTP — Her Third Place</h2>
+          <p class="text-gray-300 text-lg mb-8">
+            J'ai mis en place un système d'automatisation d'emails et de questionnaires pour <span class="text-htpBordeaux font-semibold">Her Third Place</span>, une startup qui crée des activités entre filles. Ce projet a permis de mieux comprendre les besoins des utilisatrices et de faire gagner du temps précieux à l'équipe.
+          </p>
+          <div class="flex flex-wrap gap-3 mb-8">
+            <span class="px-4 py-2 bg-black bg-opacity-40 text-htpWhite rounded-full text-sm">Automatisation</span>
+            <span class="px-4 py-2 bg-black bg-opacity-40 text-htpWhite rounded-full text-sm">Email Marketing</span>
+            <span class="px-4 py-2 bg-black bg-opacity-40 text-htpWhite rounded-full text-sm">Data Analysis</span>
+            <span class="px-4 py-2 bg-black bg-opacity-40 text-htpWhite rounded-full text-sm">Python</span>
+          </div>
+          <div>
+            <button onclick="document.getElementById('slide-5').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-htpWhite text-htpBordeaux rounded-full font-medium hover:bg-opacity-90 transition duration-300 inline-flex items-center">
+              Me contacter
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="w-full lg:w-1/2 bg-black bg-opacity-40 flex items-center justify-center p-8 md:p-16">
+          <div class="relative w-full max-w-md rounded-2xl shadow-xl p-8 overflow-hidden bg-gray-900">
+            <div class="mb-6 flex justify-center">
+              <!-- Logo de la fleur d'orchidée Her Third Place -->
+              <div class="logo-container">
+                <img src="Her_third_place_logo-.png" alt="Her Third Place Logo" class="w-48 h-auto orchid-logo">
+              </div>
+            </div>
+            <div class="text-center">
+              <h3 class="text-htpWhite font-bold text-xl">Her Third Place</h3>
+              <p class="text-gray-300 mt-4">Ce projet a permis à la startup d'augmenter son taux de réponse client de 37% et d'économiser en moyenne 15 heures de travail manuel par semaine.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Indicateur de défilement vertical -->
+      <div class="absolute bottom-10 right-8 text-white flex flex-col items-center">
+        <span class="text-sm mb-1">Défiler</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Slide 3: Projet ColocMatch -->
+    <div id="slide-3" class="snap-slide flex w-screen h-screen flex-shrink-0 bg-gradient-to-br from-colocPink to-gray-800">
+      <div class="flex flex-col lg:flex-row-reverse w-full">
+        <div class="w-full lg:w-1/2 p-8 md:p-16 flex flex-col justify-center">
+          <span class="text-white font-semibold text-lg mb-2">PROJET 02</span>
+          <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white">ColocMatch — App de Matching</h2>
+          <p class="text-gray-200 text-lg mb-8">
+            Avec une camarade, nous avons créé une application de matching de colocataires inspirée de Tinder. Je me suis occupée de la conception de la landing page et du développement du modèle économique pour assurer la viabilité du projet.
+          </p>
+          <div class="flex flex-wrap gap-3 mb-8">
+            <span class="px-4 py-2 bg-black bg-opacity-20 text-white rounded-full text-sm">UI/UX</span>
+            <span class="px-4 py-2 bg-black bg-opacity-20 text-white rounded-full text-sm">Algorithme</span>
+            <span class="px-4 py-2 bg-black bg-opacity-20 text-white rounded-full text-sm">MongoDB</span>
+            <span class="px-4 py-2 bg-black bg-opacity-20 text-white rounded-full text-sm">React</span>
+          </div>
+          <div>
+            <button onclick="document.getElementById('slide-5').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-white text-colocPink rounded-full font-medium hover:bg-opacity-90 transition duration-300 inline-flex items-center">
+              Me contacter
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="w-full lg:w-1/2 bg-black bg-opacity-20 flex items-center justify-center p-8 md:p-16">
+          <div class="relative w-full max-w-md mx-auto">
+            <div class="shadow-xl rounded-2xl bg-colocPink p-6 relative overflow-hidden coloc-card">
+              <!-- Logo clé blanche -->
+              <div class="absolute top-0 right-0 w-24 h-24 bg-colocPink rounded-bl-full flex items-center justify-center p-4 shadow-inner">
+                <svg class="w-12 h-12 text-white key-logo" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                </svg>
+              </div>
+              
+              <div class="flex justify-between items-center mb-8">
+                <h4 class="text-white font-bold text-xl">ColocMatch</h4>
+                <div class="flex space-x-1">
+                  <span class="h-3 w-3 rounded-full bg-white"></span>
+                  <span class="h-3 w-3 rounded-full bg-white opacity-50"></span>
+                  <span class="h-3 w-3 rounded-full bg-white opacity-30"></span>
+                </div>
+              </div>
+              
+              <div class="bg-white rounded-xl p-6 text-center mb-4 relative mt-4 coloc-badge">
+                <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-full bg-colocPink flex items-center justify-center text-white text-2xl font-bold shadow-lg border-4 border-white">
+                  <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                  </svg>
+                </div>
+                <div class="mt-10">
+                  <h3 class="text-xl font-bold text-gray-800">Julie, 24</h3>
+                  <p class="text-gray-600">Paris</p>
+                  <p class="text-colocPink font-medium mt-2">❤️ Photographie</p>
+                </div>
+              </div>
+              
+              <div class="flex justify-between">
+                <button class="bg-white p-3 rounded-full shadow-md text-colocPink">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                </button>
+                <button class="bg-white p-3 rounded-full shadow-md text-colocPink">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Indicateur de défilement vertical -->
+      <div class="absolute bottom-10 right-8 text-white flex flex-col items-center">
+        <span class="text-sm mb-1">Défiler</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Slide 4: Projet Carrefour -->
+    <div id="slide-4" class="snap-slide flex w-screen h-screen flex-shrink-0 bg-carrefourWhite">
+      <div class="flex flex-col lg:flex-row w-full">
+        <div class="w-full lg:w-1/2 p-8 md:p-16 flex flex-col justify-center">
+          <div class="mb-6">
+            <svg class="h-12 carrefour-logo" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M120 0L80 60H160L120 0Z" fill="#E30613"/>
+              <path d="M40 0L0 60H80L40 0Z" fill="#004E9E"/>
+              <path d="M200 0L160 60H240L200 0Z" fill="#004E9E"/>
+            </svg>
+          </div>
+          
+          <span class="text-carrefourBlue font-semibold text-lg mb-2">PROJET 03</span>
+          <h2 class="text-3xl md:text-5xl font-bold mb-6 text-carrefourBlue">
+            Base de Données Carrefour
+            <span class="text-carrefourRed ml-2">+</span>
+          </h2>
+          
+          <div class="bg-white p-6 rounded-lg shadow-xl mb-6 border-l-4 border-carrefourBlue">
+            <div class="flex space-x-4 mb-4 border-b" id="carrefour-tabs">
+              <button 
+                class="pb-2 px-3 text-carrefourBlue border-b-2 border-carrefourBlue tab-active" 
+                data-tab="description"
+              >
+                Description
+              </button>
+              <button 
+                class="pb-2 px-3 text-gray-500" 
+                data-tab="results"
+              >
+                Résultats
+              </button>
+              <button 
+                class="pb-2 px-3 text-gray-500" 
+                data-tab="tech"
+              >
+                Technologies
+              </button>
+            </div>
+            
+            <div class="tab-content active" id="description">
+              <p class="text-gray-800 mb-4">
+                Optimisation et restructuration de la base de données produits pour Carrefour :
+              </p>
+              <ul class="space-y-2 text-gray-600">
+                <li class="flex items-start">
+                  <span class="text-carrefourRed mr-2">▹</span>
+                  Refonte du schéma de la base de données pour améliorer les performances
+                </li>
+                <li class="flex items-start">
+                  <span class="text-carrefourRed mr-2">▹</span>
+                  Développement d'un système avancé de requêtes pour l'analyse de données
+                </li>
+                <li class="flex items-start">
+                  <span class="text-carrefourRed mr-2">▹</span>
+                  Création d'un tableau de bord interactif pour les gestionnaires de produits
+                </li>
+                <li class="flex items-start">
+                  <span class="text-carrefourRed mr-2">▹</span>
+                  Mise en place d'un système d'alerte automatique pour la gestion des stocks
+                </li>
+              </ul>
+            </div>
+            
+            <div class="tab-content hidden" id="results">
+              <p class="text-gray-800 mb-4">
+                Impact du projet sur les opérations de Carrefour :
+              </p>
+              <ul class="space-y-2 text-gray-600">
+                <li class="flex items-start">
+                  <span class="text-carrefourRed mr-2">▹</span>
+                  Réduction de 40% du temps d'exécution des requêtes de base de données
+                </li>
+                <li class="flex items-start">
+                  <span class="text-carrefourRed mr-2">▹</span>
+                  Diminution de 25% des ruptures de stock grâce au système d'alerte
+                </li>
+                <li class="flex items-start">
+                  <span class="text-carrefourRed mr-2">▹</span>
+                  Amélioration de 35% dans la précision des prévisions de vente
+                </li>
+                <li class="flex items-start">
+                  <span class="text-carrefourRed mr-2">▹</span>
+                  Économie estimée à 120 000€ par an grâce à l'optimisation globale
+                </li>
+              </ul>
+            </div>
+            
+            <div class="tab-content hidden" id="tech">
+              <div class="flex flex-wrap gap-3">
+                <span class="bg-white border border-carrefourBlue px-3 py-1 rounded-full text-sm text-carrefourBlue">SQL</span>
+                <span class="bg-white border border-carrefourBlue px-3 py-1 rounded-full text-sm text-carrefourBlue">PostgreSQL</span>
+                <span class="bg-white border border-carrefourRed px-3 py-1 rounded-full text-sm text-carrefourRed">Python</span>
+                <span class="bg-white border border-carrefourRed px-3 py-1 rounded-full text-sm text-carrefourRed">Pandas</span>
+                <span class="bg-white border border-carrefourBlue px-3 py-1 rounded-full text-sm text-carrefourBlue">Power BI</span>
+                <span class="bg-white border border-carrefourRed px-3 py-1 rounded-full text-sm text-carrefourRed">Docker</span>
+                <span class="bg-white border border-carrefourBlue px-3 py-1 rounded-full text-sm text-carrefourBlue">ETL</span>
+                <span class="bg-white border border-carrefourRed px-3 py-1 rounded-full text-sm text-carrefourRed">Data Mining</span>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <button onclick="document.getElementById('slide-5').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 bg-carrefourBlue text-white rounded-full font-medium hover:bg-opacity-90 transition duration-300 inline-flex items-center">
+              Me contacter
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-16">
+          <div class="flip-card-container perspective relative w-full max-w-md">
+            <div id="flip-card" class="flip-card relative transition-transform duration-700 h-80 w-full">
+              <div class="flip-card-front absolute w-full h-full backface-hidden">
+                <div class="h-full bg-white rounded-lg shadow-xl flex flex-col items-center justify-center p-6 cursor-pointer hover:shadow-2xl transition-shadow border-t-4 border-carrefourBlue">
+                  <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center text-carrefourBlue">
+                    <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7C5 4 4 5 4 7z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 14l2 2 4-4"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 9h4"></path>
+                    </svg>
+                  </div>
+                  <p class="text-carrefourBlue font-medium">
+                    Dashboard Interactif
+                    <br />
+                    <span class="text-sm text-gray-500 mt-2 block">Cliquez pour explorer</span>
+                  </p>
+                </div>
+              </div>
+              <div class="flip-card-back absolute w-full h-full backface-hidden">
+                <div class="h-full bg-gradient-to-r from-carrefourBlue to-carrefourRed rounded-lg flex items-center justify-center p-6 cursor-pointer">
+                  <div class="text-center text-white">
+                    <div class="flex justify-center items-center mb-4">
+                      <div class="w-48 h-32 bg-white p-2 rounded-lg shadow-inner">
+                        <div class="bg-gray-100 h-4 w-full mb-2 rounded"></div>
+                        <div class="flex space-x-1">
+                          <div class="bg-carrefourBlue h-16 w-1/5 rounded"></div>
+                          <div class="bg-carrefourRed h-20 w-1/5 rounded"></div>
+                          <div class="bg-carrefourBlue h-14 w-1/5 rounded"></div>
+                          <div class="bg-carrefourRed h-12 w-1/5 rounded"></div>
+                          <div class="bg-carrefourBlue h-16 w-1/5 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="font-medium">
+                      Visualisation des métriques de performance
+                      <br />
+                      <span class="text-sm mt-2 block">Cliquez pour revenir</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6 bg-white p-4 rounded-lg shadow-md border-l-4 border-carrefourRed">
+              <p class="text-gray-700">
+                Ce projet a permis à Carrefour d'optimiser sa gestion de stocks et son analyse de données,
+                conduisant à une réduction significative des coûts opérationnels.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Indicateur de défilement vertical -->
+      <div class="absolute bottom-10 right-8 text-carrefourBlue flex flex-col items-center">
+        <span class="text-sm mb-1">Défiler</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Slide 5: Contact (ancien Slide 4) -->
+    <div id="slide-5" class="snap-slide flex w-screen h-screen flex-shrink-0 gradient-bg text-white">
+      <div class="w-full flex flex-col items-center justify-center p-8">
+        <div class="max-w-2xl text-center">
+          <h2 class="text-3xl md:text-5xl font-bold mb-8">Travaillons ensemble</h2>
+          <p class="text-xl md:text-2xl mb-12 text-white/80">
+            Vous avez un projet intéressant ou une opportunité ? Je serais ravie d'échanger et de voir comment mes compétences en data science peuvent vous aider.
+          </p>
+          <div class="flex justify-center space-x-8 mb-16">
+            <div class="text-center">
+              <h3 class="font-semibold text-lg mb-2">Email</h3>
+              <p class="text-white/80">contact@example.com</p>
+            </div>
+            <div class="text-center">
+              <h3 class="font-semibold text-lg mb-2">Téléphone</h3>
+              <p class="text-white/80">+33 6 12 34 56 78</p>
+            </div>
+            <div class="text-center">
+              <h3 class="font-semibold text-lg mb-2">Basée à</h3>
+              <p class="text-white/80">Paris, France</p>
+            </div>
+          </div>
+          <a href="https://linkedin.com/" target="_blank" class="px-10 py-4 bg-white text-primary rounded-full font-medium hover:bg-opacity-90 transition duration-300 shadow-lg inline-flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+            Me contacter sur LinkedIn
+          </a>
+        </div>
+      </div>
+      <!-- Indicateur de défilement vertical -->
+      <div class="absolute bottom-10 right-8 text-white flex flex-col items-center">
+        <span class="text-sm mb-1">Défiler</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </div>
+    
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.querySelector('.snap-container');
+      const navIndicators = document.querySelectorAll('.nav-indicator');
+      const slides = document.querySelectorAll('.snap-slide');
+
+      // Gestion du menu des projets
+      const projectsButton = document.getElementById('projects-button');
+      const projectsMenu = document.getElementById('projects-menu');
+      
+      if (projectsButton && projectsMenu) {
+        projectsButton.addEventListener('click', function(e) {
+          e.stopPropagation();
+          projectsMenu.classList.toggle('hidden');
+        });
+        
+        // Fermer le menu en cliquant ailleurs
+        document.addEventListener('click', function(e) {
+          if (!projectsButton.contains(e.target) && !projectsMenu.contains(e.target)) {
+            projectsMenu.classList.add('hidden');
+          }
+        });
+        
+        // Fermer le menu après la sélection d'un projet
+        const projectButtons = projectsMenu.querySelectorAll('button');
+        projectButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            projectsMenu.classList.add('hidden');
+          });
+        });
+      }
+
+      // Mise à jour des indicateurs lors du défilement horizontal
+      container.addEventListener('scroll', function() {
+        const scrollPosition = container.scrollLeft;
+        const containerWidth = container.offsetWidth;
+
+        slides.forEach((slide, index) => {
+          const slidePosition = slide.offsetLeft;
+          const slideWidth = slide.offsetWidth;
+
+          // Si le slide est visible à plus de 50%
+          if (scrollPosition >= slidePosition - containerWidth / 2 && 
+              scrollPosition < slidePosition + slideWidth - containerWidth / 2) {
+            
+            navIndicators.forEach(ind => ind.classList.remove('active'));
+            navIndicators[index].classList.add('active');
+          }
+        });
+      });
+
+      // Gestion du défilement avec les flèches du clavier
+      document.addEventListener('keydown', function(e) {
+        const currentActiveIndex = Array.from(navIndicators).findIndex(ind => ind.classList.contains('active'));
+        
+        if (e.key === 'ArrowRight' && currentActiveIndex < slides.length - 1) {
+          slides[currentActiveIndex + 1].scrollIntoView({behavior: 'smooth'});
+        } else if (e.key === 'ArrowLeft' && currentActiveIndex > 0) {
+          slides[currentActiveIndex - 1].scrollIntoView({behavior: 'smooth'});
+        }
+      });
+
+      // Gestion des onglets du projet Carrefour
+      const tabButtons = document.querySelectorAll('#carrefour-tabs button');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Réinitialiser tous les onglets
+          tabButtons.forEach(btn => {
+            btn.classList.remove('text-carrefourBlue', 'text-carrefourRed', 'border-b-2', 'border-carrefourBlue', 'border-carrefourRed');
+            btn.classList.add('text-gray-500');
+          });
+          
+          tabContents.forEach(content => {
+            content.classList.add('hidden');
+            content.classList.remove('active');
+          });
+          
+          // Activer l'onglet sélectionné
+          const tabName = button.getAttribute('data-tab');
+          const tabColor = tabName === 'results' ? 'carrefourRed' : 'carrefourBlue';
+          
+          button.classList.remove('text-gray-500');
+          button.classList.add(`text-${tabColor}`, 'border-b-2', `border-${tabColor}`);
+          
+          const activeContent = document.getElementById(tabName);
+          activeContent.classList.remove('hidden');
+          activeContent.classList.add('active');
+        });
+      });
+
+      // Gestion de la carte retournable pour Carrefour
+      const flipCard = document.getElementById('flip-card');
+      
+      if (flipCard) {
+        // Ajouter des styles pour la carte retournable
+        const style = document.createElement('style');
+        style.textContent = `
+          .perspective { perspective: 1000px; }
+          .flip-card { transform-style: preserve-3d; transition: transform 0.6s; }
+          .flip-card.flipped { transform: rotateY(180deg); }
+          .flip-card-front, .flip-card-back { backface-visibility: hidden; }
+          .flip-card-back { transform: rotateY(180deg); }
+        `;
+        document.head.appendChild(style);
+        
+        // Ajouter l'événement de clic
+        flipCard.addEventListener('click', () => {
+          flipCard.classList.toggle('flipped');
+        });
+      }
+      
+      // Afficher/masquer les indicateurs de défilement vertical en fonction du besoin
+      slides.forEach(slide => {
+        const scrollIndicator = slide.querySelector('.absolute.bottom-10.right-8');
+        if (scrollIndicator) {
+          // Vérifier si le contenu dépasse
+          function checkOverflow() {
+            if (slide.scrollHeight > slide.clientHeight) {
+              scrollIndicator.classList.remove('hidden');
+            } else {
+              scrollIndicator.classList.add('hidden');
+            }
+          }
+          
+          // Vérifier au chargement et au redimensionnement
+          checkOverflow();
+          window.addEventListener('resize', checkOverflow);
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

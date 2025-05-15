@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Portfolio d'une étudiante en première année de Data Science"
+    />
+    <link rel="apple-touch-icon" href="logo192.png" />
+    <link rel="manifest" href="manifest.json" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Portfolio Data Science</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      body {
+        background-color: #f9f9f9;
+        color: #333;
+        line-height: 1.6;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      
+      section {
+        padding: 80px 0;
+      }
+      
+      h1, h2, h3 {
+        font-weight: 600;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #3498db;
+      }
+      
+      h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      
+      h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      
+      p {
+        margin-bottom: 1rem;
+      }
+      
+      .btn {
+        display: inline-block;
+        background: #3498db;
+        color: #fff;
+        padding: 0.7rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: 0.3s;
+      }
+      
+      .btn:hover {
+        background: #2980b9;
+      }
+
+      .content {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .project-card {
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        margin: 15px;
+        padding: 20px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        max-width: 350px;
+        width: 100%;
+      }
+
+      .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .project-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 40px;
+      }
+
+      .project-title {
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .project-description {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .project-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+        justify-content: center;
+      }
+
+      .skill-tag {
+        background-color: #e1f0fa;
+        color: #3498db;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      footer {
+        background-color: #333;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+        width: 100%;
+      }
+
+      .footer-text {
+        color: #ccc;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <!-- Version statique du portfolio pour affichage immédiat -->
+      <div class="content">
+        <h1>Portfolio Data Science</h1>
+        <p>Bienvenue sur mon portfolio qui met en avant mes projets de data science</p>
+        
+        <h2>Mes Projets</h2>
+        <div class="project-container">
+          <div class="project-card">
+            <h3 class="project-title">Analyse de données de ventes</h3>
+            <p class="project-description">Analyse exploratoire des données de ventes d'une entreprise fictive pour identifier les tendances et prédire les ventes futures.</p>
+            <div class="project-skills">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">Pandas</span>
+              <span class="skill-tag">Matplotlib</span>
+              <span class="skill-tag">Seaborn</span>
+            </div>
+            <a href="#" class="btn">Voir le projet</a>
+          </div>
+          
+          <div class="project-card">
+            <h3 class="project-title">Classification d'images</h3>
+            <p class="project-description">Projet de classification d'images utilisant des techniques d'apprentissage automatique pour distinguer différentes catégories d'objets.</p>
+            <div class="project-skills">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">TensorFlow</span>
+              <span class="skill-tag">Scikit-learn</span>
+              <span class="skill-tag">CNN</span>
+            </div>
+            <a href="#" class="btn">Voir le projet</a>
+          </div>
+          
+          <div class="project-card">
+            <h3 class="project-title">Dashboard interactif</h3>
+            <p class="project-description">Création d'un tableau de bord interactif pour visualiser les données de performance d'une entreprise.</p>
+            <div class="project-skills">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">Dash</span>
+              <span class="skill-tag">Plotly</span>
+              <span class="skill-tag">SQL</span>
+            </div>
+            <a href="#" class="btn">Voir le projet</a>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <p class="footer-text">&copy; 2023 Portfolio Data Science | Tous droits réservés</p>
+      </footer>
+    </div>
+  </body>
+</html> 
