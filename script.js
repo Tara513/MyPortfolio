@@ -3,6 +3,37 @@ document.addEventListener('DOMContentLoaded', function() {
   // Année courante pour le footer
   document.getElementById('currentYear').textContent = new Date().getFullYear();
 
+  // Fonction pour activer les tabs dans les projets
+  window.activateTab = function(tabId) {
+    // Cacher tous les contenus de tab
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => {
+      content.classList.add('hidden');
+    });
+    
+    // Afficher le contenu du tab sélectionné
+    const selectedContent = document.getElementById(tabId);
+    if (selectedContent) {
+      selectedContent.classList.remove('hidden');
+    }
+    
+    // Mise à jour des boutons de tabs
+    const tabButtons = document.querySelectorAll('[data-tab]');
+    tabButtons.forEach(button => {
+      if (button.getAttribute('data-tab') === tabId) {
+        button.classList.add('tab-active');
+        button.classList.add('border-b-2');
+        button.classList.add('border-white');
+        button.classList.remove('text-opacity-70');
+      } else {
+        button.classList.remove('tab-active');
+        button.classList.remove('border-b-2');
+        button.classList.remove('border-white');
+        button.classList.add('text-opacity-70');
+      }
+    });
+  };
+
   // Menu mobile
   const menuToggle = document.querySelector('.menu-toggle');
   const navbarLinks = document.querySelector('.navbar-links');

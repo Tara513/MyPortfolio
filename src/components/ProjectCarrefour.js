@@ -108,6 +108,28 @@ const ProjectCarrefour = () => {
                 </div>
               )}
             </div>
+            
+            <div className="bg-white p-6 rounded-lg shadow-xl mb-6 border-l-4 border-carrefourBlue">
+              <h3 className="font-bold text-lg text-gray-800 mb-4">Outils utilisés</h3>
+              <div className="flex flex-wrap gap-3">
+                <span className="bg-white border-2 border-carrefourBlue px-3 py-1 rounded-full text-sm text-carrefourBlue font-medium shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 flex items-center">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Google_Sheets_logo_%282014-2020%29.svg/1498px-Google_Sheets_logo_%282014-2020%29.svg.png" alt="Google Sheets" className="w-4 h-4 mr-1.5" />
+                  Google Sheets
+                </span>
+                <span className="bg-white border-2 border-carrefourRed px-3 py-1 rounded-full text-sm text-carrefourRed font-medium shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 flex items-center">
+                  <img src="https://cdn.worldvectorlogo.com/logos/looker-1.svg" alt="Looker Studio" className="w-4 h-4 mr-1.5" />
+                  Looker Studio
+                </span>
+                <span className="bg-white border-2 border-carrefourBlue px-3 py-1 rounded-full text-sm text-carrefourBlue font-medium shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 flex items-center">
+                  <img src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/sql/sql.png" alt="SQL" className="w-4 h-4 mr-1.5" />
+                  SQL
+                </span>
+                <span className="bg-white border-2 border-carrefourRed px-3 py-1 rounded-full text-sm text-carrefourRed font-medium shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 flex items-center">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Pandas_logo.svg/1200px-Pandas_logo.svg.png" alt="Pandas" className="w-4 h-4 mr-1.5" />
+                  Pandas
+                </span>
+              </div>
+            </div>
           </div>
           
           <div className="md:w-1/2 relative">
